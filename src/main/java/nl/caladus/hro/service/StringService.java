@@ -20,7 +20,7 @@ public class StringService {
                stringBuilder.append(input.charAt(i));
            }
         } catch (Exception e) {
-            return "";
+            throw new RuntimeException();
         }
 
         String reversedString = stringBuilder.toString();
@@ -30,15 +30,19 @@ public class StringService {
     }
 
 
-    public int length(String input) {
+    public int count(String input) {
 
         if (checkMemory(input)) return Integer.parseInt(wordRepository.getMemory().get(input));
 
-        int length = input.split(" ").length;
+        try {
 
-        wordRepository.setMemory(input, String.valueOf(length));
+            int length = input.split(" ").length;
+            wordRepository.setMemory(input, String.valueOf(length));
+            return length;
 
-        return length;
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
 
     }
 

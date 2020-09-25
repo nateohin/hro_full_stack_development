@@ -3,8 +3,8 @@ package nl.caladus.hro.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class StringServiceTest {
@@ -14,16 +14,39 @@ class StringServiceTest {
 
 
     @Test
-    void reverseTest() {
+    void correctReverseTest() {
 
-        assertEquals(stringUtilService.reverse("test"), "tset");
-        assertEquals(stringUtilService.reverse("1234"), "4321");
-        assertNotEquals(stringUtilService.reverse("boddom"), "mddoob");
-        assertNotEquals(stringUtilService.reverse("1234"), "1234");
-        assertEquals(stringUtilService.reverse("  "), "  ");
-        assertEquals(stringUtilService.reverse(""), "");
+        assertThat(stringUtilService.reverse("test")).isEqualTo( "tset");
+        assertThat(stringUtilService.reverse("1234")).isEqualTo( "4321");
+        assertThat(stringUtilService.reverse("  ")).isEqualTo( "  ");
+        assertThat(stringUtilService.reverse(("")).isEmpty());
 
+    }
 
+    @Test
+    void incorrectReverseTest() {
+        assertThat(stringUtilService.reverse("boddom")).isNotEqualTo( "mddoob");
+        assertThat(stringUtilService.reverse("1234")).isNotEqualTo( "1234");
+    }
+
+    @Test
+    void emptyReverseTest() {
+        assertThrows(RuntimeException.class, () ->
+                stringUtilService.reverse(null));
+    }
+
+    @Test
+    void correctCountTest() {
+
+        assertThat(stringUtilService.count("test me please")).isEqualTo( 3);
+        assertThat(stringUtilService.count("Try again!")).isEqualTo( 2);
+
+    }
+
+    @Test
+    void emptyCountTest() {
+        assertThrows(RuntimeException.class, () ->
+                stringUtilService.count(null));
     }
 
 }

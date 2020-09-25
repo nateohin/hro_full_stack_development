@@ -1,12 +1,12 @@
 package nl.caladus.hro.controller;
 
+import nl.caladus.hro.model.Input;
 import nl.caladus.hro.service.StringService;
 import nl.caladus.hro.utils.PredicateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,19 +22,29 @@ public class StringController {
     private StringService stringService;
 
     @PostMapping("/reverse")
-    public String stringReverse(String input) {
+    public ResponseEntity stringReverse(@RequestBody Input input) {
 
-        List<String> profiles = Arrays.asList(environment.getActiveProfiles());
-        if (PredicateUtils.equals(profiles, "TEST")) {
-            return input.toUpperCase();
+        try {
+            List<String> profiles = Arrays.asList(environment.getActiveProfiles());
+            if (PredicateUtils.equals(profiles, "TEST")) {
+                return ResponseEntity.ok(input.getTest().toUpperCase());
+            }
+
+            return ResponseEntity.ok(stringService.reverse(input.getTest()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("failed to process request");
         }
 
-        return stringService.reverse(input);
     }
 
-    @PostMapping("/length")
-    public int textLength(String input) {
-        return stringService.length(input);
+    @PostMapping("/count")
+    public ResponseEntity textLength(@RequestBody Input input) {
+
+        try {
+            return ResponseEntity.ok(stringService.count(input.getTest()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("failed to process request");
+        }
     }
 
 }

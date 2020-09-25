@@ -11,7 +11,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class HomeControllerTest {
+class HomeControllerTest {
 
     @LocalServerPort
     private int port;
@@ -20,7 +20,7 @@ public class HomeControllerTest {
     private TestRestTemplate restTemplate;
 
     @Test
-    public void greetingShouldReturnDefaultMessage() throws Exception {
+    void greetingShouldReturnDefaultMessage() throws Exception {
         assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/",
                 String.class)).contains("Hello, World");
     }

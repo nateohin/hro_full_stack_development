@@ -8,13 +8,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest
-public class SmokeTest {
+class SmokeTest {
 
     @Autowired
     private StringController stringController;
 
     @Test
-    public void contextLoads() throws Exception {
+    void contextLoads() throws Exception {
         assertThat(stringController).isNotNull();
     }
 }
