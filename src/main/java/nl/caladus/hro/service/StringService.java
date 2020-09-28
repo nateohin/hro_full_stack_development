@@ -1,13 +1,19 @@
 package nl.caladus.hro.service;
 
 import nl.caladus.hro.repository.WordRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 @Service
 public class StringService {
 
-    private static WordRepository wordRepository = new WordRepository();
+    private WordRepository wordRepository;
+
+    @Autowired
+    public StringService(WordRepository wordRepository) {
+        this.wordRepository = wordRepository;
+    }
 
     public String reverse(String input) {
 

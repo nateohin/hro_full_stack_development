@@ -8,7 +8,11 @@ import java.util.HashMap;
 @Repository
 public class WordRepository {
 
-    private HashMap<String, String> memory = new HashMap<>();
+    private HashMap<String, String> memory;
+
+    public WordRepository(HashMap<String, String> memory) {
+        this.memory = memory;
+    }
 
     public HashMap<String, String> getMemory() {
         return memory;
