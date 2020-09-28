@@ -20,7 +20,6 @@ class StringServiceTest {
         assertThat(stringUtilService.reverse("test")).isEqualTo( "tset");
         assertThat(stringUtilService.reverse("1234")).isEqualTo( "4321");
         assertThat(stringUtilService.reverse("  ")).isEqualTo( "  ");
-        assertThat(stringUtilService.reverse(("")).isEmpty());
 
     }
 
@@ -34,6 +33,8 @@ class StringServiceTest {
     void emptyReverseTest() {
         assertThrows(RuntimeException.class, () ->
                 stringUtilService.reverse(null));
+        assertThrows(RuntimeException.class, () ->
+                stringUtilService.reverse(""));
     }
 
     @Test

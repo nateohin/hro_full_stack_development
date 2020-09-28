@@ -11,30 +11,27 @@ public class StringService {
 
     public String reverse(String input) {
 
-        if (checkMemory(input)) return wordRepository.getMemory().get(input);
-
-
         StringBuilder stringBuilder = new StringBuilder();
         try {
-           for (int i = input.length() - 1; i >= 0; i--) {
+            if (checkMemory(input)) return wordRepository.getMemory().get(input);
+
+            for (int i = input.length() - 1; i >= 0; i--) {
                stringBuilder.append(input.charAt(i));
-           }
+            }
         } catch (Exception e) {
             throw new RuntimeException();
         }
 
         String reversedString = stringBuilder.toString();
         wordRepository.setMemory(input, reversedString);
-
         return reversedString;
     }
 
 
     public int count(String input) {
 
-        if (checkMemory(input)) return Integer.parseInt(wordRepository.getMemory().get(input));
-
         try {
+            if (checkMemory(input)) return Integer.parseInt(wordRepository.getMemory().get(input));
 
             int length = input.split(" ").length;
             wordRepository.setMemory(input, String.valueOf(length));
@@ -43,10 +40,14 @@ public class StringService {
         } catch (Exception e) {
             throw new RuntimeException();
         }
-
     }
 
     private boolean checkMemory(String input) {
+
+        if (input == null || input.isEmpty()) {
+            throw new RuntimeException();
+        }
+
         return wordRepository.getMemory().containsKey(input);
     }
 
