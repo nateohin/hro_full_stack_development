@@ -205,6 +205,19 @@ class AccountControllerTest {
     }
 
     @Test
+    void updateNonExistingBlockAccount() throws Exception {
+        URI uri = new URI("http://localhost:" + port + "/account");
+        Account account1 = new Account();
+        account1.setIBAN("I don't exist");
+        HttpEntity<Account> request =
+                new HttpEntity<>(account1, headers);
+        ResponseEntity<String> response = restTemplate.
+                exchange(uri, HttpMethod.PUT, request, String.class);
+        System.out.println(response);
+        assertThat(response.getBody().toString()).isEqualTo("\"NO_CONTENT\"");
+    }
+
+    @Test
     void deleteAccount() throws Exception {
         HttpEntity<Account> request =
                 new HttpEntity<>(account, headers);
@@ -221,8 +234,14 @@ class AccountControllerTest {
 
         ResponseEntity<Map> response3 = restTemplate.
                 getForEntity(uri + "/" + account.getIBAN(), Map.class);
-        assertThat(response3.getStatusCode().value()).isEqualTo(204);
+        assertThat(response3.getStatusCode().value()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 
-
+    @Test
+    void deleteNonExistingAccount() throws Exception {
+        URI uri = new URI("http://localhost:" + port + "/account");
+        ResponseEntity<Account> response = restTemplate.
+                getForEntity(uri + "/" + "I don't exist", Account.class);
+        assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.NO_CONTENT.value());;
+    }
 }

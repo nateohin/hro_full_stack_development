@@ -36,7 +36,6 @@ public class AccountController extends BaseController {
 
     @GetMapping("/{IBAN}")
     public ResponseEntity getAccount(@PathVariable String IBAN) {
-
         try {
             Account account = accountService.getAccount(IBAN);
             if (account == null) {
@@ -51,6 +50,11 @@ public class AccountController extends BaseController {
     @PutMapping
     public HttpStatus updateAccount(@RequestBody Account account) {
         try {
+            Account account1 = accountService.getAccount(account.getIBAN());
+            if (account1 == null) {
+                return HttpStatus.NO_CONTENT;
+            }
+            System.out.println("test");
             accountService.updateAccount(account);
             return HttpStatus.ACCEPTED;
         } catch (Exception e) {
