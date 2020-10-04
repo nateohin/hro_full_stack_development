@@ -31,21 +31,28 @@ public class AccountService {
                 value.setAmount(account.getAmount() + value.getAmount());
             }
             if (account.getAccountHolders() != null) {
-                AtomicBoolean isAlreadyInList = new AtomicBoolean(false);
-                account.getAccountHolders().forEach(accountHolder -> {
-                    value.getAccountHolders().forEach(accountHolder1 -> {
-                        if (accountHolder.getFirstName().equals(accountHolder1.getFirstName()) &&
-                                accountHolder.getLastName().equals(accountHolder1.getLastName())) {
-                            value.getAccountHolders().remove(accountHolder1);
-                            isAlreadyInList.set(true);
-                        }
-                    });
-                    if (!isAlreadyInList.get()) {
-                        value.getAccountHolders().addAll(value.getAccountHolders());
-                    }
-                });
+                mutateAccountHolders(account, value);
+            }
+            if (account.isBlocked() != null) {
+                value.setBlocked(account.isBlocked());
             }
             return value;
+        });
+    }
+
+    private void mutateAccountHolders(Account account, Account value) {
+        AtomicBoolean isAlreadyInList = new AtomicBoolean(false);
+        account.getAccountHolders().forEach(accountHolder -> {
+            value.getAccountHolders().forEach(accountHolder1 -> {
+                if (accountHolder.getFirstName().equals(accountHolder1.getFirstName()) &&
+                        accountHolder.getLastName().equals(accountHolder1.getLastName())) {
+                    value.getAccountHolders().remove(accountHolder1);
+                    isAlreadyInList.set(true);
+                }
+            });
+            if (!isAlreadyInList.get()) {
+                value.getAccountHolders().addAll(value.getAccountHolders());
+            }
         });
     }
 

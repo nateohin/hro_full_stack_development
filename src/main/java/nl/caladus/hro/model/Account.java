@@ -13,6 +13,8 @@ public class Account {
     @NotNull(message = "Amount cannot be null")
     private float amount;
 
+    private boolean blocked = false;
+
     @NotNull(message = "AccountHolders cannot be null")
     private List<AccountHolder> accountHolders;
 
@@ -59,6 +61,14 @@ public class Account {
 
     public void setAccountHolders(List<AccountHolder> accountHolders) {
         this.accountHolders = accountHolders;
+    }
+
+    public Boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
     }
 
     @Override
