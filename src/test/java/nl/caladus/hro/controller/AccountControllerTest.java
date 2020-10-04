@@ -93,7 +93,7 @@ class AccountControllerTest {
                 getForObject(uri,  List.class);
         assertThat(accounts1.size()).isEqualTo(1);
 
-        for (int i = 0; i <= 10; i++) {
+        for (int i = 0; i < 30; i++) {
             AccountHolder accountHolder1 = new AccountHolder("John" + i, "Doe" + i);
             AccountHolder accountHolder2 = new AccountHolder("Jane" + i, "Doe" + i);
             Account account1 = new Account("123456789" + i, 1000.00F, Arrays.asList(accountHolder1, accountHolder2));
@@ -106,7 +106,12 @@ class AccountControllerTest {
         }
         List accounts2 = restTemplate.
                 getForObject(uri,  List.class);
-        assertThat(accounts2.size()).isEqualTo(11);
+        assertThat(accounts2.size()).isEqualTo(30);
+
+        List accounts3 = restTemplate.
+                getForObject(uri + "?pageSize=5",  List.class);
+        // TODO
+        assertThat(accounts3.size()).isEqualTo(30);
     }
 
     @Test

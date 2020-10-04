@@ -3,7 +3,7 @@ package nl.caladus.hro.model;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-public class Account {
+public class Account implements  Comparable<Account> {
 
     private String id;
 
@@ -79,5 +79,10 @@ public class Account {
                 ", amount=" + amount +
                 ", accountHolders=" + accountHolders +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Account a) {
+        return this.getIBAN().compareTo(a.getIBAN());
     }
 }

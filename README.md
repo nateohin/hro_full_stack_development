@@ -11,3 +11,5 @@ https://mkyong.com/maven/maven-pitest-mutation-testing-example/
 https://spring.io/guides/gs/actuator-service/
 
 https://stackoverflow.com/questions/4157972/how-to-update-a-value-given-a-key-in-a-hashmap
+
+http://www.java2s.com/Code/Java/Collections-Data-Structure/Pagingoveracollection.htm

@@ -2,6 +2,7 @@ package nl.caladus.hro.controller;
 
 import nl.caladus.hro.model.Account;
 import nl.caladus.hro.service.AccountService;
+import nl.caladus.hro.utils.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,9 +35,10 @@ public class AccountController extends BaseController {
     }
 
     @GetMapping
-    public ResponseEntity getAccounts() {
+    public ResponseEntity getAccounts(@RequestParam(defaultValue = "0") Integer pageNo,
+                                       @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
         try {
-            List<Account> accounts = accountService.getAccounts();
+            List<Account> accounts = accountService.getAccounts(pageNo, pageSize);
             if (accounts == null) {
                 return ResponseEntity.noContent().build();
             }
