@@ -50,7 +50,7 @@ public class Account {
     }
 
     public void setAmount(float amount) {
-        this.amount = this.amount + amount;
+        this.amount = amount;
     }
 
     public List<AccountHolder> getAccountHolders() {

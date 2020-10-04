@@ -14,6 +14,7 @@ import org.springframework.http.*;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,7 +47,7 @@ class AccountControllerTest {
         ResponseEntity<String> response = restTemplate.
                 postForEntity(uri, request, String.class);
         assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.getBody().isEmpty()).isFalse();
+        assertThat(Objects.requireNonNull(response.getBody()).isEmpty()).isFalse();
     }
 
     @Test
@@ -90,37 +91,36 @@ class AccountControllerTest {
         HttpEntity<Account> request =
                 new HttpEntity<>(account, headers);
         URI uri = new URI("http://localhost:" + port + "/account");
+
         ResponseEntity<String> response = restTemplate.
                 postForEntity(uri, request, String.class);
         assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
 
-        ResponseEntity<Account> response1 = restTemplate.
-                getForEntity(uri + "/" + account.getIBAN(), Account.class);
-        assertThat(response1.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
+        Account response1 = restTemplate.
+                getForObject(uri + "/" + account.getIBAN(), Account.class);
+        assertThat(response1.getAmount()).isEqualTo(1000);
 
-        account.setAmount(1000);
+        response1.setAmount(1000);
         HttpEntity<Account> request1 =
-                new HttpEntity<>(account, headers);
+                new HttpEntity<>(response1, headers);
         ResponseEntity<String> response2 = restTemplate.
                 exchange(uri, HttpMethod.PUT, request1, String.class);
         assertThat(response2.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
 
         Account response3 = restTemplate.
                 getForObject(uri + "/" + account.getIBAN(), Account.class);
-        // TODO
-        assertThat(response3.getAmount()).isEqualTo(3000);
+        assertThat(response3.getAmount()).isEqualTo(2000);
 
-        account.setAmount(-500);
+        response3.setAmount(-500);
         HttpEntity<Account> request4 =
-                new HttpEntity<>(account, headers);
+                new HttpEntity<>(response3, headers);
         ResponseEntity<String> response4 = restTemplate.
                 exchange(uri, HttpMethod.PUT, request4, String.class);
         assertThat(response4.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
 
         Account response5 = restTemplate.
                 getForObject(uri + "/" + account.getIBAN(), Account.class);
-        // TODO
-        assertThat(response5.getAmount()).isEqualTo(4500);
+        assertThat(response5.getAmount()).isEqualTo(1500);
     }
 
 

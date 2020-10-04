@@ -42,7 +42,7 @@ public class AccountController extends BaseController {
             if (account == null) {
                 return ResponseEntity.noContent().build();
             }
-            return ResponseEntity.ok(accountService.getAccount(IBAN));
+            return ResponseEntity.ok(account);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("failed to process request");
         }

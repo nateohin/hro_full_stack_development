@@ -26,7 +26,7 @@ public class AccountService {
     public void updateAccount(Account account) {
         accountRepository.getAccounts().computeIfPresent(account.getIBAN(), (key, value) -> {
             if (account.getAmount() > -100000000) {
-                value.setAmount(account.getAmount());
+                value.setAmount(account.getAmount() + value.getAmount());
             }
             if (account.getAccountHolders() != null) {
                 account.getAccountHolders().forEach(accountHolder -> {
