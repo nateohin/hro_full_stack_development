@@ -62,7 +62,7 @@ class AccountServiceTest {
 
         // Then
         assertThat(accountService).isNotNull();
-        assertThat(accountService.getAccount("1234567890").getAmount()).isEqualTo(2000);
+        assertThat(accountService.getAccount("1234567890").getAmount()).isEqualTo(1000);
         assertThat(accountService.getAccount("1234567890").getAccountHolders().get(0).getFirstName()).isEqualTo("Tom");
 
     }

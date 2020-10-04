@@ -13,6 +13,7 @@ import org.springframework.http.*;
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
@@ -123,6 +124,44 @@ class AccountControllerTest {
         assertThat(response5.getAmount()).isEqualTo(1500);
     }
 
+    @Test
+    void updateAccountHolders() throws Exception {
+        HttpEntity<Account> request =
+                new HttpEntity<>(account, headers);
+        URI uri = new URI("http://localhost:" + port + "/account");
+
+        ResponseEntity<String> response = restTemplate.
+                postForEntity(uri, request, String.class);
+        assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
+
+        Account response1 = restTemplate.
+                getForObject(uri + "/" + account.getIBAN(), Account.class);
+        assertThat(response1.getAccountHolders().toString()).isEqualTo(account.getAccountHolders().toString());
+
+        response1.getAccountHolders().remove(0); // John
+        HttpEntity<Account> request1 =
+                new HttpEntity<>(response1, headers);
+        ResponseEntity<String> response2 = restTemplate.
+                exchange(uri, HttpMethod.PUT, request1, String.class);
+        assertThat(response2.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
+
+        Account response3 = restTemplate.
+                getForObject(uri + "/" + account.getIBAN(), Account.class);
+        assertThat(response3.getAccountHolders().size()).isEqualTo(1);
+
+        Account newAccount = new Account();
+        newAccount.setIBAN(account.getIBAN());
+        newAccount.setAccountHolders(Collections.singletonList(new AccountHolder("Kat", "Williams")));
+        HttpEntity<Account> request4 =
+                new HttpEntity<>(newAccount, headers);
+        ResponseEntity<String> response4 = restTemplate.
+                exchange(uri, HttpMethod.PUT, request4, String.class);
+        assertThat(response4.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
+
+        Account response5 = restTemplate.
+                getForObject(uri + "/" + account.getIBAN(), Account.class);
+        assertThat(response5.getAccountHolders().size()).isEqualTo(2);
+    }
 
     @Test
     void deleteAccount() throws Exception {

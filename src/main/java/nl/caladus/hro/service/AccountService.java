@@ -5,6 +5,8 @@ import nl.caladus.hro.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 @Service
 public class AccountService {
 
@@ -29,20 +31,19 @@ public class AccountService {
                 value.setAmount(account.getAmount() + value.getAmount());
             }
             if (account.getAccountHolders() != null) {
+                AtomicBoolean isAlreadyInList = new AtomicBoolean(false);
                 account.getAccountHolders().forEach(accountHolder -> {
                     value.getAccountHolders().forEach(accountHolder1 -> {
-                        if (accountHolder.equals(accountHolder1)) {
-                            // TODO
+                        if (accountHolder.getFirstName().equals(accountHolder1.getFirstName()) &&
+                                accountHolder.getLastName().equals(accountHolder1.getLastName())) {
                             value.getAccountHolders().remove(accountHolder1);
+                            isAlreadyInList.set(true);
                         }
                     });
+                    if (!isAlreadyInList.get()) {
+                        value.getAccountHolders().addAll(value.getAccountHolders());
+                    }
                 });
-            }
-            if (account.getAccountHolders() != null) {
-                value.getAccountHolders().addAll(account.getAccountHolders());
-            }
-            if (account.getAccountHolders() != null && account.getAccountHolders().isEmpty()) {
-                value.setAccountHolders(account.getAccountHolders());
             }
             return value;
         });
