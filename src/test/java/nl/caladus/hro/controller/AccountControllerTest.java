@@ -12,10 +12,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
 
 import java.net.URI;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,8 +22,8 @@ class AccountControllerTest {
     @LocalServerPort
     private int port;
 
-    private HttpHeaders headers;
-    private Account account;
+    private HttpHeaders headers = new HttpHeaders();
+    private Account account = new Account();
 
     @BeforeEach
     void setUp() {
@@ -77,6 +74,39 @@ class AccountControllerTest {
         Account response1 = restTemplate.
                 getForObject(uri + "/" + account.getIBAN(), Account.class);
         assertThat(response1.getIBAN()).isEqualTo("1234567890");
+    }
+
+    @Test
+    void getAccounts() throws Exception {
+        HttpEntity<Account> request =
+                new HttpEntity<>(account, headers);
+        URI uri = new URI("http://localhost:" + port + "/account");
+        ResponseEntity<String> response = restTemplate.
+                postForEntity(uri, request, String.class);
+        assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
+
+        Account response1 = restTemplate.
+                getForObject(uri + "/" + account.getIBAN(), Account.class);
+        assertThat(response1.getIBAN()).isEqualTo("1234567890");
+
+        List accounts1 = restTemplate.
+                getForObject(uri,  List.class);
+        assertThat(accounts1.size()).isEqualTo(1);
+
+        for (int i = 0; i <= 10; i++) {
+            AccountHolder accountHolder1 = new AccountHolder("John" + i, "Doe" + i);
+            AccountHolder accountHolder2 = new AccountHolder("Jane" + i, "Doe" + i);
+            Account account1 = new Account("123456789" + i, 1000.00F, Arrays.asList(accountHolder1, accountHolder2));
+
+            HttpEntity<Account> request1 =
+                    new HttpEntity<>(account1, headers);
+            ResponseEntity<String> response2 = restTemplate.
+                    postForEntity(uri, request1, String.class);
+            assertThat(response2.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
+        }
+        List accounts2 = restTemplate.
+                getForObject(uri,  List.class);
+        assertThat(accounts2.size()).isEqualTo(11);
     }
 
     @Test
@@ -231,8 +261,8 @@ class AccountControllerTest {
 
         restTemplate.delete(uri + "/" + account.getIBAN());
 
-        ResponseEntity<Map> response3 = restTemplate.
-                getForEntity(uri + "/" + account.getIBAN(), Map.class);
+        ResponseEntity<Account> response3 = restTemplate.
+                getForEntity(uri + "/" + account.getIBAN(), Account.class);
         assertThat(response3.getStatusCode().value()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 

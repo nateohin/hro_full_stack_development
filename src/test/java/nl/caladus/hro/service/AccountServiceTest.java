@@ -43,12 +43,6 @@ class AccountServiceTest {
 
     }
 
-//    @Test
-//    void failToCreateAccount() {
-//        assertThrows(NullPointerException.class, () ->
-//                accountService.addAccount( null));
-//    }
-
     @Test
     void updateAccount() {
 

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
@@ -22,9 +24,13 @@ public class AccountService {
         accountRepository.getAccounts().put(account.getIBAN(), account);
     }
 
-    @Cacheable("account")
     public Account getAccount(String IBAN) {
         return accountRepository.getAccounts().get(IBAN);
+    }
+
+    @Cacheable(cacheNames = "accounts", unless = "#result.size() <= 20")
+    public List<Account> getAccounts() {
+        return new ArrayList<>(accountRepository.getAccounts().values());
     }
 
     public void updateAccount(Account account) {

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -19,16 +20,27 @@ public class AccountController extends BaseController {
     @Autowired
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
-
     }
 
     @PostMapping
     public ResponseEntity addAccount(@Valid @RequestBody Account account) {
-
         try {
             account.setId(UUID.randomUUID().toString());
             accountService.addAccount(account);
             return ResponseEntity.ok(account);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("failed to process request");
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity getAccounts() {
+        try {
+            List<Account> accounts = accountService.getAccounts();
+            if (accounts == null) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(accounts);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("failed to process request");
         }
@@ -54,7 +66,6 @@ public class AccountController extends BaseController {
             if (account1 == null) {
                 return HttpStatus.NO_CONTENT;
             }
-            System.out.println("test");
             accountService.updateAccount(account);
             return HttpStatus.ACCEPTED;
         } catch (Exception e) {
