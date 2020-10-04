@@ -9,3 +9,5 @@ https://mkyong.com/maven/maven-jacoco-code-coverage-example/
 https://mkyong.com/maven/maven-pitest-mutation-testing-example/
 
 https://spring.io/guides/gs/actuator-service/
+
+https://stackoverflow.com/questions/4157972/how-to-update-a-value-given-a-key-in-a-hashmap
