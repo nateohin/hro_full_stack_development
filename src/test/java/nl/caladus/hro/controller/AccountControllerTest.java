@@ -213,8 +213,7 @@ class AccountControllerTest {
                 new HttpEntity<>(account1, headers);
         ResponseEntity<String> response = restTemplate.
                 exchange(uri, HttpMethod.PUT, request, String.class);
-        System.out.println(response);
-        assertThat(response.getBody().toString()).isEqualTo("\"NO_CONTENT\"");
+        assertThat(response.getBody()).isEqualTo("\"NO_CONTENT\"");
     }
 
     @Test

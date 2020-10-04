@@ -3,6 +3,7 @@ package nl.caladus.hro.service;
 import nl.caladus.hro.model.Account;
 import nl.caladus.hro.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -21,6 +22,7 @@ public class AccountService {
         accountRepository.getAccounts().put(account.getIBAN(), account);
     }
 
+    @Cacheable("account")
     public Account getAccount(String IBAN) {
         return accountRepository.getAccounts().get(IBAN);
     }
