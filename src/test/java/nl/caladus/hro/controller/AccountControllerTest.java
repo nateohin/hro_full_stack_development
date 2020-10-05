@@ -22,8 +22,8 @@ class AccountControllerTest {
     @LocalServerPort
     private int port;
 
-    private HttpHeaders headers = new HttpHeaders();
-    private Account account = new Account();
+    private HttpHeaders headers ;
+    private Account account;
 
     @BeforeEach
     void setUp() {
@@ -50,8 +50,6 @@ class AccountControllerTest {
 
     @Test
     void createAccountBadResponse() throws Exception {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Account> request =
                 new HttpEntity<>(new Account(), headers);
         URI uri = new URI("http://localhost:" + port + "/account");

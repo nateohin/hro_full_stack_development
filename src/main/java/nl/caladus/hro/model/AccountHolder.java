@@ -11,8 +11,7 @@ public class AccountHolder {
     @NotNull(message = "Last name cannot be null")
     private String lastName;
 
-    public AccountHolder(@NotNull(message = "First name cannot be null") String firstName,
-                         @NotNull(message = "Last name cannot be null") String lastName) {
+    public AccountHolder(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }

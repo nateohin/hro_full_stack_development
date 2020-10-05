@@ -22,10 +22,7 @@ public class Account implements  Comparable<Account> {
         // default no args constructor
     }
 
-    public Account(
-                   @NotNull(message = "IBAN cannot be null") String IBAN,
-                   @NotNull(message = "Amount cannot be null") float amount,
-                   @NotNull(message = "AccountHolders cannot be null") List<AccountHolder> accountHolders) {
+    public Account(String IBAN, float amount, List<AccountHolder> accountHolders) {
         this.IBAN = IBAN;
         this.amount = amount;
         this.accountHolders = accountHolders;
