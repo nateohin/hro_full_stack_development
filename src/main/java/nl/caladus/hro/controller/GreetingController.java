@@ -1,23 +1,27 @@
 package nl.caladus.hro.controller;
 
-import nl.caladus.hro.service.GreetingService;
-import org.springframework.stereotype.Controller;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
+import nl.caladus.hro.model.Greeting;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
-
-@Controller
+@RestController
 public class GreetingController {
 
-    private final GreetingService service;
-
-    public GreetingController(GreetingService service) {
-        this.service = service;
-    }
+    private static final String TEMPLATE = "Hello, %s!";
 
     @RequestMapping("/greeting")
-    public @ResponseBody String greeting() {
-        return service.greet();
-    }
+    public HttpEntity<Greeting> greeting(
+            @RequestParam(value = "name", defaultValue = "World") String name) {
 
+        Greeting greeting = new Greeting(String.format(TEMPLATE, name));
+        greeting.add(linkTo(methodOn(GreetingController.class).greeting(name)).withSelfRel());
+
+        return new ResponseEntity<>(greeting, HttpStatus.OK);
+    }
 }
