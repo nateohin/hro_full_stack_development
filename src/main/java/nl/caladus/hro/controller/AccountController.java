@@ -15,7 +15,7 @@ import java.util.UUID;
 @RequestMapping("/account")
 public class AccountController extends BaseController {
 
-    private AccountService accountService;
+    private final AccountService accountService;
 
     @Autowired
     public AccountController(AccountService accountService) {

@@ -9,10 +9,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,8 +30,11 @@ class AccountControllerTest {
     @LocalServerPort
     private int port;
 
-    private HttpHeaders headers ;
+    private HttpHeaders headers;
     private Account account;
+
+    @Autowired
+    private TestRestTemplate restTemplate;
 
     @BeforeEach
     void setUp() {
@@ -33,9 +44,6 @@ class AccountControllerTest {
         AccountHolder accountHolder2 = new AccountHolder("Jane", "Doe");
         account = new Account("1234567890", 1000.00F, Arrays.asList(accountHolder1, accountHolder2));
     }
-
-    @Autowired
-    private TestRestTemplate restTemplate;
 
     @Test
     void createAccountResponse() throws Exception {
@@ -88,7 +96,7 @@ class AccountControllerTest {
         assertThat(response1.getIBAN()).isEqualTo("1234567890");
 
         List accounts1 = restTemplate.
-                getForObject(uri,  List.class);
+                getForObject(uri, List.class);
         assertThat(accounts1.size()).isEqualTo(1);
 
         for (int i = 0; i < 30; i++) {
@@ -103,11 +111,11 @@ class AccountControllerTest {
             assertThat(response2.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
         }
         List accounts2 = restTemplate.
-                getForObject(uri,  List.class);
+                getForObject(uri, List.class);
         assertThat(accounts2.size()).isEqualTo(30);
 
         List accounts3 = restTemplate.
-                getForObject(uri + "?pageSize=5",  List.class);
+                getForObject(uri + "?pageSize=5", List.class);
         // TODO
         assertThat(accounts3.size()).isEqualTo(30);
     }
@@ -274,6 +282,6 @@ class AccountControllerTest {
         URI uri = new URI("http://localhost:" + port + "/account");
         ResponseEntity<Account> response = restTemplate.
                 getForEntity(uri + "/" + "I don't exist", Account.class);
-        assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.NO_CONTENT.value());;
+        assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 }

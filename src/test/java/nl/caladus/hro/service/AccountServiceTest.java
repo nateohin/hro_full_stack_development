@@ -2,89 +2,86 @@ package nl.caladus.hro.service;
 
 import nl.caladus.hro.model.Account;
 import nl.caladus.hro.model.AccountHolder;
-import org.junit.jupiter.api.BeforeEach;
+import nl.caladus.hro.repository.AccountRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class AccountServiceTest {
+public class AccountServiceTest {
 
+    public static final String IBAN = "1234567890";
     @Mock
-    AccountService accountService;
-
-    private Account account;
-
-    @BeforeEach
-    void setUp() {
-        AccountHolder accountHolder1 = new AccountHolder("John", "Doe");
-        AccountHolder accountHolder2 = new AccountHolder("Jane", "Doe");
-        account = new Account("1234567890", 1000F, Arrays.asList(accountHolder1, accountHolder2));
-    }
+    private AccountRepository accountRepository;
+    @InjectMocks
+    private AccountServiceTestImpl accountServiceTest;
 
     @Test
-    void createAccount() {
+    void readAccount() {
 
         // Given
-        when(accountService.getAccount(account.getIBAN())).thenReturn(account);
+        AccountHolder accountHolder1 = new AccountHolder("John", "Doe");
+        AccountHolder accountHolder2 = new AccountHolder("Jane", "Doe");
+        Account account = new Account(IBAN, 1000F, Arrays.asList(accountHolder1, accountHolder2));
+        when(accountRepository.getAccount(eq(IBAN))).thenReturn(account);
 
         // When
-        accountService.addAccount( account);
+        accountServiceTest.addAccount(account);
 
         // Then
-        assertThat(accountService).isNotNull();
-        assertThat(accountService.getAccount("1234567890").getIBAN()).isEqualTo(account.getIBAN());
-        assertThat(accountService.getAccount("1234567890").getAccountHolders()).isEqualTo(account.getAccountHolders());
-
+        assertThat(accountServiceTest.getAccount(IBAN)).isEqualTo(account);
+        verify(accountRepository, times(1)).addAccount(account);
     }
 
     @Test
     void updateAccount() {
 
         // Given
-        when(accountService.getAccount(account.getIBAN())).thenReturn(account);
+        AccountHolder accountHolder1 = new AccountHolder("John", "Doe");
+        AccountHolder accountHolder2 = new AccountHolder("Jane", "Doe");
+        Account account = new Account(IBAN, 1000F, Arrays.asList(accountHolder1, accountHolder2));
+        when(accountRepository.getAccount(eq(IBAN))).thenReturn(account);
 
         // When
-        account.setAmount(1000F);
-        account.getAccountHolders().get(0).setFirstName("Tom");
-        accountService.updateAccount( account);
+        account.setBlocked(true);
+        accountServiceTest.updateAccount(account);
 
         // Then
-        assertThat(accountService).isNotNull();
-        assertThat(accountService.getAccount("1234567890").getAmount()).isEqualTo(1000);
-        assertThat(accountService.getAccount("1234567890").getAccountHolders().get(0).getFirstName()).isEqualTo("Tom");
-
+        assertThat(accountServiceTest.getAccount(IBAN).isBlocked()).isTrue();
+        verify(accountRepository, times(1)).updateAccount(account);
     }
 
     @Test
     void deleteAccount() {
 
         // Given
-        assertThat(accountService).isNotNull();
+        AccountHolder accountHolder1 = new AccountHolder("John", "Doe");
+        AccountHolder accountHolder2 = new AccountHolder("Jane", "Doe");
+        Account account = new Account(IBAN, 1000F, Arrays.asList(accountHolder1, accountHolder2));
+        when(accountRepository.getAccount(eq(IBAN))).thenReturn(null);
 
         // When
-        accountService.deleteAccount(account.getIBAN());
+        accountServiceTest.addAccount(account);
+        accountServiceTest.deleteAccount(IBAN);
 
         // Then
-        assertThat(accountService.getAccount("")).isNull();
+        assertThat(accountServiceTest.getAccount(IBAN)).isNull();
+        verify(accountRepository, times(1)).deleteAccount(IBAN);
     }
 
-    @Test
-    void deleteAccountByIBAN() {
-
-        // Given
-        assertThat(accountService).isNotNull();
-
-        // When
-        accountService.deleteAccount(account.getIBAN());
-
-        // Then
-        assertThat(accountService.getAccount("")).isNull();
+    static class AccountServiceTestImpl extends AccountService {
+        public AccountServiceTestImpl(AccountRepository accountRepository) {
+            super(accountRepository);
+        }
     }
-
 }

@@ -13,7 +13,7 @@ public class AccountRepositoryConfig {
 
     @Bean
     @Qualifier("accounts")
-    public Map<String, Account > accounts() {
-        return  new HashMap<>();
+    public Map<String, Account> accounts() {
+        return new HashMap<>();
     }
 }

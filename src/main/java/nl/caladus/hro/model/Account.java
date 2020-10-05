@@ -3,7 +3,7 @@ package nl.caladus.hro.model;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-public class Account implements  Comparable<Account> {
+public class Account implements Comparable<Account> {
 
     private String id;
 
