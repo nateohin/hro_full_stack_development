@@ -77,6 +77,10 @@ public class AccountController extends BaseController {
     @DeleteMapping("/{IBAN}")
     public HttpStatus deleteAccount(@PathVariable String IBAN) {
         try {
+            Account account1 = accountService.getAccount(IBAN);
+            if (account1 == null) {
+                return HttpStatus.NO_CONTENT;
+            }
             accountService.deleteAccount(IBAN);
             return HttpStatus.ACCEPTED;
         } catch (Exception e) {
