@@ -3,26 +3,13 @@ package nl.caladus.hro.service;
 import nl.caladus.hro.repository.WordRepository;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class StringService {
 
-    private static WordRepository wordRepository = new WordRepository();
+    private static final WordRepository wordRepository = new WordRepository();
 
     public String reverse(String input) {
-
-        StringBuilder stringBuilder = new StringBuilder();
-        try {
-            if (checkMemory(input)) return wordRepository.getMemory().get(input);
-
-            for (int i = input.length() - 1; i >= 0; i--) {
-               stringBuilder.append(input.charAt(i));
-            }
-        } catch (Exception e) {
-            throw new RuntimeException();
-        }
-
-        String reversedString = stringBuilder.toString();
+        String reversedString = new StringBuilder(input).reverse().toString();
         wordRepository.setMemory(input, reversedString);
         return reversedString;
     }

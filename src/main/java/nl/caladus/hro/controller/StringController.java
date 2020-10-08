@@ -15,11 +15,13 @@ import java.util.List;
 @RequestMapping("/words")
 public class StringController {
 
-    @Autowired
-    private Environment environment;
+    private final Environment environment;
+    private final StringService stringService;
 
-    @Autowired
-    private StringService stringService;
+    public StringController(Environment environment, StringService stringService) {
+        this.environment = environment;
+        this.stringService = stringService;
+    }
 
     @PostMapping("/reverse")
     public ResponseEntity stringReverse(@RequestBody Input input) {
