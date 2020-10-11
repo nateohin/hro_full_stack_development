@@ -9,13 +9,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/account")
 public class AccountController extends BaseController {
 
-    private AccountService accountService;
+    private final AccountService accountService;
 
     @Autowired
     public AccountController(AccountService accountService) {
@@ -25,7 +24,6 @@ public class AccountController extends BaseController {
     @PostMapping
     public ResponseEntity addAccount(@Valid @RequestBody Account account) {
         try {
-            account.setId(UUID.randomUUID().toString());
             accountService.addAccount(account);
             return ResponseEntity.ok(account);
         } catch (Exception e) {
@@ -35,7 +33,7 @@ public class AccountController extends BaseController {
 
     @GetMapping
     public ResponseEntity getAccounts(@RequestParam(defaultValue = "0") Integer pageNo,
-                                       @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+                                      @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
         try {
             List<Account> accounts = accountService.getAccounts(pageNo, pageSize);
             if (accounts == null) {
@@ -50,7 +48,7 @@ public class AccountController extends BaseController {
     @GetMapping("/{IBAN}")
     public ResponseEntity getAccount(@PathVariable String IBAN) {
         try {
-            Account account = accountService.getAccount(IBAN);
+            Account account = accountService.getAccountByIBAN(IBAN);
             if (account == null) {
                 return ResponseEntity.noContent().build();
             }
@@ -63,7 +61,7 @@ public class AccountController extends BaseController {
     @PutMapping
     public HttpStatus updateAccount(@RequestBody Account account) {
         try {
-            Account account1 = accountService.getAccount(account.getIBAN());
+            Account account1 = accountService.getAccountByIBAN(account.getIBAN());
             if (account1 == null) {
                 return HttpStatus.NO_CONTENT;
             }
@@ -74,13 +72,18 @@ public class AccountController extends BaseController {
         }
     }
 
+    // TDO srp move al methods in service
     @DeleteMapping("/{IBAN}")
     public HttpStatus deleteAccount(@PathVariable String IBAN) {
-        try {
-            accountService.deleteAccount(IBAN);
-            return HttpStatus.ACCEPTED;
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("failed to process request").getStatusCode();
+            try {
+                Account account = accountService.getAccountByIBAN(IBAN);
+                if (account == null) {
+                    return HttpStatus.NO_CONTENT;
+                }
+                accountService.delete(account);
+                return HttpStatus.ACCEPTED;
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body("failed to process request").getStatusCode();
+            }
         }
     }
-}
