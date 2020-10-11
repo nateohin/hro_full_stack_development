@@ -1,21 +1,13 @@
 package nl.caladus.hro.repository;
 
 import nl.caladus.hro.model.Account;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Map;
-
 @Repository
-public class AccountRepository {
+public interface AccountRepository extends JpaRepository<Account, Long> {
 
-    private final Map<String, Account> accounts;
+    Account findByIBAN(String IBAN);
 
-    public AccountRepository(@Qualifier("accounts") Map<String, Account> accounts) {
-        this.accounts = accounts;
-    }
-
-    public Map<String, Account> getAccounts() {
-        return accounts;
-    }
+    void deleteByIBAN(String IBAN);
 }

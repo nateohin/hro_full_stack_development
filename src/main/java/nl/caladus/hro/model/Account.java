@@ -1,11 +1,14 @@
 package nl.caladus.hro.model;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Set;
 
-public class Account implements  Comparable<Account> {
-
-    private String id;
+@Entity
+public class Account extends BaseEntity {
 
     @NotNull(message = "IBAN cannot be null")
     private String IBAN;
@@ -15,28 +18,18 @@ public class Account implements  Comparable<Account> {
 
     private boolean blocked = false;
 
-    @NotNull(message = "AccountHolders cannot be null")
-    private List<AccountHolder> accountHolders;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @NotNull(message = "Account holder must not be null")
+    private Set<AccountHolder> accountHolder;
 
     public Account() {
         // default no args constructor
     }
 
-    public Account(
-                   @NotNull(message = "IBAN cannot be null") String IBAN,
-                   @NotNull(message = "Amount cannot be null") float amount,
-                   @NotNull(message = "AccountHolders cannot be null") List<AccountHolder> accountHolders) {
+    public Account(String IBAN, float amount, Set<AccountHolder> accountHolder) {
         this.IBAN = IBAN;
         this.amount = amount;
-        this.accountHolders = accountHolders;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+        this.accountHolder = accountHolder;
     }
 
     public String getIBAN() {
@@ -55,14 +48,6 @@ public class Account implements  Comparable<Account> {
         this.amount = amount;
     }
 
-    public List<AccountHolder> getAccountHolders() {
-        return accountHolders;
-    }
-
-    public void setAccountHolders(List<AccountHolder> accountHolders) {
-        this.accountHolders = accountHolders;
-    }
-
     public Boolean isBlocked() {
         return blocked;
     }
@@ -71,18 +56,25 @@ public class Account implements  Comparable<Account> {
         this.blocked = blocked;
     }
 
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", IBAN='" + IBAN + '\'' +
-                ", amount=" + amount +
-                ", accountHolders=" + accountHolders +
-                '}';
+    public Set<AccountHolder> getAccountHolders() {
+        return accountHolder;
+    }
+
+    public void setAccountHolders(Set<AccountHolder> accountHolder) {
+        this.accountHolder = accountHolder;
     }
 
     @Override
-    public int compareTo(Account a) {
-        return this.getIBAN().compareTo(a.getIBAN());
+    public String toString() {
+        return "Account{" +
+                "IBAN='" + IBAN + '\'' +
+                ", amount=" + amount + '\'' +
+                ", blocked=" + blocked + '\'' +
+                ", accountHolder=" + accountHolder + '\'' +
+                ", id=" + getId() + '\'' +
+                ", create=" + getCreate() + '\'' +
+                ", lastModified=" + getLastModified() + '\'' +
+                ", version=" + getVersion() +
+                '}';
     }
 }
