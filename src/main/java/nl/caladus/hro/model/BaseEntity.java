@@ -4,7 +4,6 @@ import nl.caladus.hro.utils.LocalDateTimeConverter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -23,11 +22,11 @@ public class BaseEntity {
     private Integer version;
 
     @CreationTimestamp
-//    @Convert(converter = LocalDateTimeConverter.class)
+    @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime create;
 
     @UpdateTimestamp
-//    @Convert(converter = LocalDateTimeConverter.class)
+    @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime lastModified;
 
     public Long getId() {

@@ -19,3 +19,7 @@ mysql> create user 'hrouser'@'%' identified by 'hrouser'; -- Creates the user
 mysql> grant all on hro.* to 'hrouser'@'%'; -- Gives all privileges to the new user on the newly created database
 mysql> revoke all on hro.* from 'hrouser'@'%';
 mysql> grant select, insert, delete, update on hro.* to 'hrouser'@'%';
+
+https://mkyong.com/spring-boot/spring-boot-profile-based-properties-and-yaml-example/
+https://dzone.com/articles/dealing-with-javas-localdatetime-in-jpa
+https://attacomsian.com/blog/spring-data-jpa-one-to-many-mapping
