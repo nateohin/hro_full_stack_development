@@ -4,6 +4,7 @@ import nl.caladus.hro.model.Account;
 import nl.caladus.hro.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -46,12 +47,6 @@ public class AccountService {
     public void deleteAccountByIBAN(String IBAN) {
         accountRepository.deleteByIBAN(IBAN);
     }
-
-    public void delete(Account account) {
-        accountRepository.delete(account);
-    }
-
-
 
     @Cacheable(cacheNames = "accounts", unless = "#result.size() <= 20")
     public List<Account> getAccounts(Integer pageNo, Integer pageSize) {

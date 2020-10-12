@@ -62,9 +62,6 @@ public class AccountController extends BaseController {
     public HttpStatus updateAccount(@RequestBody Account account) {
         try {
             Account account1 = accountService.getAccountByIBAN(account.getIBAN());
-            if (account1 == null) {
-                return HttpStatus.NO_CONTENT;
-            }
             accountService.updateAccount(account1, account);
             return HttpStatus.ACCEPTED;
         } catch (Exception e) {
@@ -72,15 +69,10 @@ public class AccountController extends BaseController {
         }
     }
 
-    // TDO srp move al methods in service
     @DeleteMapping("/{IBAN}")
     public HttpStatus deleteAccount(@PathVariable String IBAN) {
             try {
-                Account account = accountService.getAccountByIBAN(IBAN);
-                if (account == null) {
-                    return HttpStatus.NO_CONTENT;
-                }
-                accountService.delete(account);
+                accountService.deleteAccountByIBAN(IBAN);
                 return HttpStatus.ACCEPTED;
             } catch (Exception e) {
                 return ResponseEntity.badRequest().body("failed to process request").getStatusCode();
