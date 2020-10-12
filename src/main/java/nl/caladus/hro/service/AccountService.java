@@ -1,7 +1,6 @@
 package nl.caladus.hro.service;
 
 import nl.caladus.hro.model.Account;
-import nl.caladus.hro.repository.AccountHolderRepository;
 import nl.caladus.hro.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -12,12 +11,10 @@ import java.util.List;
 public class AccountService {
 
     private final AccountRepository accountRepository;
-    private final AccountHolderRepository accountHolderRepository;
 
     @Autowired
-    public AccountService(AccountRepository accountRepository, AccountHolderRepository accountHolderRepository) {
+    public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
-        this.accountHolderRepository = accountHolderRepository;
     }
 
     public void addAccount(Account account) { ;
@@ -33,8 +30,17 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
-    public void updateAccount(Account account) {
-        accountRepository.save(account);
+    public void updateAccount(Account oldAccount, Account account) {
+        if (account.getAmount() != null ) {
+            oldAccount.setAmount(oldAccount.getAmount() + account.getAmount());
+        }
+        if (account.getAccountHolders() != null) {
+            oldAccount.setAccountHolders(account.getAccountHolders());
+        }
+        if (account.isBlocked()!= null) {
+            oldAccount.setBlocked(account.isBlocked());
+        }
+        accountRepository.save(oldAccount);
     }
 
     public void deleteAccountByIBAN(String IBAN) {

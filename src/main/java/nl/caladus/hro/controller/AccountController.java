@@ -65,7 +65,7 @@ public class AccountController extends BaseController {
             if (account1 == null) {
                 return HttpStatus.NO_CONTENT;
             }
-            accountService.updateAccount(account);
+            accountService.updateAccount(account1, account);
             return HttpStatus.ACCEPTED;
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("failed to process request").getStatusCode();

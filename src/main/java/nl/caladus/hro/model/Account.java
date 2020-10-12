@@ -13,23 +13,19 @@ public class Account extends BaseEntity {
     @NotNull(message = "IBAN cannot be null")
     private String IBAN;
 
-    @NotNull(message = "Amount cannot be null")
-    private float amount;
+    private @NotNull(message = "Amount cannot be null") Float amount;
 
     private boolean blocked = false;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.ALL}
+            )
     @NotNull(message = "Account holder must not be null")
-    private Set<AccountHolder> accountHolder;
+    private Set<AccountHolder> accountHolders;
 
     public Account() {
         // default no args constructor
-    }
-
-    public Account(String IBAN, float amount, Set<AccountHolder> accountHolder) {
-        this.IBAN = IBAN;
-        this.amount = amount;
-        this.accountHolder = accountHolder;
     }
 
     public String getIBAN() {
@@ -40,11 +36,11 @@ public class Account extends BaseEntity {
         this.IBAN = IBAN;
     }
 
-    public float getAmount() {
+    public @NotNull(message = "Amount cannot be null") Float getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(@NotNull(message = "Amount cannot be null") Float amount) {
         this.amount = amount;
     }
 
@@ -57,11 +53,11 @@ public class Account extends BaseEntity {
     }
 
     public Set<AccountHolder> getAccountHolders() {
-        return accountHolder;
+        return accountHolders;
     }
 
     public void setAccountHolders(Set<AccountHolder> accountHolder) {
-        this.accountHolder = accountHolder;
+        this.accountHolders = accountHolder;
     }
 
     @Override
@@ -70,8 +66,7 @@ public class Account extends BaseEntity {
                 "IBAN='" + IBAN + '\'' +
                 ", amount=" + amount + '\'' +
                 ", blocked=" + blocked + '\'' +
-                ", accountHolder=" + accountHolder + '\'' +
-                ", id=" + getId() + '\'' +
+                ", accountHolder=" + accountHolders + '\'' +
                 ", create=" + getCreate() + '\'' +
                 ", lastModified=" + getLastModified() + '\'' +
                 ", version=" + getVersion() +

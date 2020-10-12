@@ -2,6 +2,8 @@ package nl.caladus.hro.repository;
 
 import nl.caladus.hro.model.Account;
 import nl.caladus.hro.model.AccountHolder;
+import nl.caladus.hro.model.Address;
+import nl.caladus.hro.model.Gender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +24,6 @@ public class AccountRepositoryTest {
     @Autowired
     AccountRepository accountRepository;
 
-    @Autowired
-    AccountHolderRepository accountHolderRepository;
-
     private Account account;
     private Account account1;
     private HashSet<AccountHolder> accountHolders;
@@ -33,21 +32,44 @@ public class AccountRepositoryTest {
     @BeforeEach
     void setUp() {
 
-        AccountHolder accountHolder = new AccountHolder("John", "Doe");
+        AccountHolder accountHolder = new AccountHolder();
+        accountHolder.setFirstName("John");
+        accountHolder.setLastName("Doe");
         accountHolder.setId(1L);
-        AccountHolder accountHolder1 = new AccountHolder("Jane", "Doe");
+        accountHolder.setGender(Gender.MALE);
+        Address address = new Address("Rotterdam", "3000AA", "weststraat", "88");
+        accountHolder.setAddress(address);
+        AccountHolder accountHolder1 = new AccountHolder();
+        accountHolder1.setFirstName("Jane");
+        accountHolder1.setLastName("Doe");
         accountHolder1.setId(2L);
+        accountHolder1.setGender(Gender.FEMALE);
+        accountHolder1.setAddress(address);
         accountHolders = new HashSet<>();
         accountHolders.add(accountHolder);
         accountHolders.add(accountHolder1);
-        account = new Account(IBAN1, INITIAL_AMOUNT1, accountHolders);
+        account = new Account();
+        account.setIBAN(IBAN1);
+        account.setAmount(INITIAL_AMOUNT1);
+        account.setAccountHolders(accountHolders);
 
-        AccountHolder accountHolder3 = new AccountHolder("Daniel", "Kaluuya");
-        AccountHolder accountHolder4 = new AccountHolder("Georgina", "Campbell");
+        AccountHolder accountHolder3 = new AccountHolder();
+        accountHolder3.setFirstName("Daniel");
+        accountHolder3.setLastName("Kaluuya");
+        accountHolder3.setAddress(address);
+        accountHolder3.setGender(Gender.MALE);
+        AccountHolder accountHolder4 = new AccountHolder();
+        accountHolder4.setFirstName("Georgina");
+        accountHolder4.setLastName("Campbell");
+        accountHolder4.setAddress(address);
+        accountHolder4.setGender(Gender.FEMALE);
         HashSet<AccountHolder> accountHolders1 = new HashSet<>();
         accountHolders1.add(accountHolder3);
         accountHolders1.add(accountHolder4);
-        account1 = new Account(IBAN2, INITIAL_AMOUNT2, accountHolders1);
+        account1= new Account();
+        account1.setIBAN(IBAN2);
+        account1.setAmount(INITIAL_AMOUNT2);
+        account1.setAccountHolders(accountHolders1);
     }
 
 
@@ -78,13 +100,16 @@ public class AccountRepositoryTest {
         Account account = accountRepository.findByIBAN(IBAN1);
         account.setAmount(account.getAmount() + -500F);
         account.getAccountHolders().remove(0);
-        account.getAccountHolders().add(new AccountHolder("Nathan",  "Ernst"));
+        AccountHolder accountHolder = new AccountHolder();
+        accountHolder.setFirstName("John");
+        accountHolder.setLastName("Doe");
+        account.getAccountHolders().add(accountHolder);
         accountRepository.save(account);
 
         // Then
         Account account1 = accountRepository.findByIBAN(IBAN1);
         assertThat(account1.getAmount()).isEqualTo(9500F);
-        assertThat(account1.getAccountHolders().size()).isEqualTo(2);
+        assertThat(account1.getAccountHolders().size()).isEqualTo(3);
     }
 
     @Test
@@ -102,6 +127,4 @@ public class AccountRepositoryTest {
         // Then
         assertThat(account3).isNull();
     }
-
-
 }
