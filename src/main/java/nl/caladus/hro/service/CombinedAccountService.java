@@ -27,9 +27,6 @@ public class CombinedAccountService {
         this.combinedAccountMapper = combinedAccountMapper;
     }
 
-    /*
-    result list > 5 for testing purposes
-     */
     @Cacheable(cacheNames = "combinedAccounts", unless = "#result.size() <= 5")
     public CombinedAccountDto createCombinedAccount(CombinedAccount combinedAccount) {
         return combinedAccountMapper.toDto(combinedAccountRepository.save(combinedAccount));
