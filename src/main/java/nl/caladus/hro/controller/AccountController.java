@@ -1,81 +1,44 @@
 package nl.caladus.hro.controller;
 
+import io.swagger.annotations.ApiOperation;
+import nl.caladus.hro.dto.AccountDto;
 import nl.caladus.hro.model.Account;
-import nl.caladus.hro.service.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController
 @RequestMapping("/account")
-public class AccountController extends BaseController {
+public interface AccountController {
 
-    private final AccountService accountService;
-
-    @Autowired
-    public AccountController(AccountService accountService) {
-        this.accountService = accountService;
-    }
-
+    @ApiOperation(value = "Create an account")
     @PostMapping
-    public ResponseEntity addAccount(@Valid @RequestBody Account account) {
-        try {
-            accountService.addAccount(account);
-            return ResponseEntity.ok(account);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("failed to process request");
-        }
-    }
+    ResponseEntity<?> createAccount(@Valid @RequestBody AccountDto accountDto);
 
+    @ApiOperation(value = "Get multiple accounts")
     @GetMapping
-    public ResponseEntity getAccounts(@RequestParam(defaultValue = "0") Integer pageNo,
-                                      @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
-        try {
-            List<Account> accounts = accountService.getAccounts(pageNo, pageSize);
-            if (accounts == null) {
-                return ResponseEntity.noContent().build();
-            }
-            return ResponseEntity.ok(accounts);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("failed to process request");
-        }
-    }
+    ResponseEntity<List<Account>> getAccounts(@RequestParam(defaultValue = "0") Integer pageNo,
+                                                     @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize);
 
+    @ApiOperation(value = "Get an account")
     @GetMapping("/{IBAN}")
-    public ResponseEntity getAccount(@PathVariable String IBAN) {
-        try {
-            Account account = accountService.getAccountByIBAN(IBAN);
-            if (account == null) {
-                return ResponseEntity.noContent().build();
-            }
-            return ResponseEntity.ok(account);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("failed to process request");
-        }
-    }
+    ResponseEntity<AccountDto> getAccount(@PathVariable String IBAN);
 
+    @ApiOperation(value = "Update an account")
     @PutMapping
-    public HttpStatus updateAccount(@RequestBody Account account) {
-        try {
-            Account account1 = accountService.getAccountByIBAN(account.getIBAN());
-            accountService.updateAccount(account1, account);
-            return HttpStatus.ACCEPTED;
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("failed to process request").getStatusCode();
-        }
-    }
+    HttpStatus updateAccount(@Valid  @RequestBody AccountDto accountDto);
 
+    @ApiOperation(value = "Delete an account")
     @DeleteMapping("/{IBAN}")
-    public HttpStatus deleteAccount(@PathVariable String IBAN) {
-            try {
-                accountService.deleteAccountByIBAN(IBAN);
-                return HttpStatus.ACCEPTED;
-            } catch (Exception e) {
-                return ResponseEntity.badRequest().body("failed to process request").getStatusCode();
-            }
-        }
-    }
+    HttpStatus deleteAccount(@PathVariable String IBAN);
+
+}

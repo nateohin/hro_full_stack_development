@@ -1,11 +1,15 @@
 package nl.caladus.hro.service;
 
+import nl.caladus.hro.dto.AccountDto;
 import nl.caladus.hro.model.Account;
 import nl.caladus.hro.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -18,32 +22,37 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public void addAccount(Account account) { ;
-        accountRepository.save(account);
+    public Account createAccount(Account account) {
+        return accountRepository.save(account);
     }
 
     public Account getAccountByIBAN(String IBAN) {
         return accountRepository.findByIBAN(IBAN);
     }
 
-    @Cacheable(cacheNames = "accounts", unless = "#result.size() <= 20")
+    /*
+    result list > 5 for testing purposes
+     */
+    @Cacheable(cacheNames = "accounts", unless = "#result.size() <= 5")
     public List<Account> getAccounts() {
         return accountRepository.findAll();
     }
 
-    public void updateAccount(Account oldAccount, Account account) {
+    @CachePut(value = "accounts")
+    public void updateAccount(Account oldAccount, AccountDto account) {
         if (account.getAmount() != null ) {
             oldAccount.setAmount(oldAccount.getAmount() + account.getAmount());
         }
         if (account.getAccountHolders() != null) {
             oldAccount.setAccountHolders(account.getAccountHolders());
         }
-        if (account.isBlocked()!= null) {
+        if (account.isBlocked() != null) {
             oldAccount.setBlocked(account.isBlocked());
         }
         accountRepository.save(oldAccount);
     }
 
+    @CacheEvict(value = "accounts", allEntries = true)
     public void deleteAccountByIBAN(String IBAN) {
         accountRepository.deleteByIBAN(IBAN);
     }
