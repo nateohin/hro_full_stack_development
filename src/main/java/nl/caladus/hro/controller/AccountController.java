@@ -40,5 +40,4 @@ public interface AccountController {
     @ApiOperation(value = "Delete an account")
     @DeleteMapping("/{IBAN}")
     HttpStatus deleteAccount(@PathVariable String IBAN);
-
 }

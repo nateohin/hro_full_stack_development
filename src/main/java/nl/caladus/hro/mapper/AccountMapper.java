@@ -15,12 +15,11 @@ public interface AccountMapper {
     Account toEntity(AccountDto accountDto);
 
     @Named("IBAN")
-    public static int toAccountNumber(String IBAN) {
+    static int toAccountNumber(String IBAN) {
         try {
             return Integer.parseInt(IBAN.substring(IBAN.length() - 8));
         } catch (Exception e) {
             return 0;
         }
     }
-
 }

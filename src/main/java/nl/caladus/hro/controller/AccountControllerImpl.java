@@ -21,20 +21,19 @@ public class AccountControllerImpl extends BaseController implements AccountCont
     private final AccountMapper accountMapper;
 
     @Autowired
-    public AccountControllerImpl(AccountService accountService, AccountMapper accountMapper) {
+    public AccountControllerImpl(
+            AccountService accountService,
+            AccountMapper accountMapper) {
         this.accountService = accountService;
         this.accountMapper = accountMapper;
     }
 
     @Override
     @LogExecutionTime
-    public ResponseEntity<?> createAccount(AccountDto accountDto) {
-
+    public ResponseEntity<AccountDto> createAccount(AccountDto accountDto) {
         Account account=  accountMapper.toEntity(accountDto);
         account.setAccountNumber(AccountMapper.toAccountNumber(accountDto.getIBAN()));
-        account = accountService.createAccount(account);
-
-        return ResponseEntity.ok(account);
+        return ResponseEntity.ok(accountService.createAccount(account));
     }
 
     @Override
@@ -51,7 +50,6 @@ public class AccountControllerImpl extends BaseController implements AccountCont
     @Override
     @LogExecutionTime
     public ResponseEntity<AccountDto> getAccount(String IBAN) {
-
         Account account = accountService.getAccountByIBAN(IBAN);
         if (account == null) {
             return ResponseEntity.noContent().build();
@@ -76,5 +74,5 @@ public class AccountControllerImpl extends BaseController implements AccountCont
     public HttpStatus deleteAccount(String IBAN) {
         accountService.deleteAccountByIBAN(IBAN);
         return HttpStatus.ACCEPTED;
-        }
     }
+}

@@ -1,6 +1,7 @@
 package nl.caladus.hro.service;
 
 import nl.caladus.hro.dto.AccountDto;
+import nl.caladus.hro.mapper.AccountMapper;
 import nl.caladus.hro.model.Account;
 import nl.caladus.hro.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +17,19 @@ import java.util.List;
 public class AccountService {
 
     private final AccountRepository accountRepository;
+    private final AccountMapper accountMapper;
 
     @Autowired
-    public AccountService(AccountRepository accountRepository) {
+    public AccountService(AccountRepository accountRepository, AccountMapper accountMapper) {
         this.accountRepository = accountRepository;
+        this.accountMapper = accountMapper;
     }
 
-    public Account createAccount(Account account) {
-        return accountRepository.save(account);
+    public AccountDto createAccount(Account account) {
+        return accountMapper.toDto(accountRepository.save(account));
     }
 
+    @Cacheable(cacheNames = "accounts")
     public Account getAccountByIBAN(String IBAN) {
         return accountRepository.findByIBAN(IBAN);
     }
