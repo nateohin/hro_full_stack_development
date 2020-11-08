@@ -31,7 +31,7 @@ public class AccountControllerImpl extends BaseController implements AccountCont
     @Override
     @LogExecutionTime
     public ResponseEntity<AccountDto> createAccount(AccountDto accountDto) {
-        Account account=  accountMapper.toEntity(accountDto);
+        Account account =  accountMapper.toEntity(accountDto);
         account.setAccountNumber(AccountMapper.toAccountNumber(accountDto.getIBAN()));
         return ResponseEntity.ok(accountService.createAccount(account));
     }

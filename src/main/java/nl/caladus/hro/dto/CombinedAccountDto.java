@@ -1,38 +1,41 @@
-package nl.caladus.hro.dto;
-
-import javax.validation.constraints.NotNull;
-
-public class CombinedAccountDto {
-
-    private long id;
-
-    @NotNull
-    private AccountDto accountDto1;
-
-    @NotNull
-    private  AccountDto accountDto2;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public AccountDto getAccountDto1() {
-        return accountDto1;
-    }
-
-    public void setAccountDto1(AccountDto accountDto1) {
-        this.accountDto1 = accountDto1;
-    }
-
-    public AccountDto getAccountDto2() {
-        return accountDto2;
-    }
-
-    public void setAccountDto2(AccountDto accountDto2) {
-        this.accountDto2 = accountDto2;
-    }
-}
+//package nl.caladus.hro.dto;
+//
+//import nl.caladus.hro.model.Account;
+//
+//import javax.validation.constraints.NotNull;
+//import java.util.Set;
+//
+//public class CombinedAccountDto {
+//
+//    private long id;
+//
+//    @NotNull(message = "Account holder must not be null")
+//    private Set<Account> accounts;
+//
+//    @NotNull
+//    private String IBAN;
+//
+//    public long getId() {
+//        return id;
+//    }
+//
+//    public void setId(long id) {
+//        this.id = id;
+//    }
+//
+//    public String getIBAN() {
+//        return IBAN;
+//    }
+//
+//    public void setIBAN(String IBAN) {
+//        this.IBAN = IBAN;
+//    }
+//
+//    public Set<Account> getAccounts() {
+//        return accounts;
+//    }
+//
+//    public void setAccounts(Set<Account> accounts) {
+//        this.accounts = accounts;
+//    }
+//}

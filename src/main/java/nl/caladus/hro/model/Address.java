@@ -1,13 +1,9 @@
 package nl.caladus.hro.model;
 
 import javax.persistence.Embeddable;
-import javax.persistence.GeneratedValue;
 
 @Embeddable
-public class Address {
-
-    @GeneratedValue
-    private Long addressId;
+public class Address extends BaseEntity {
 
     private String city;
     private String postalCode;
@@ -15,14 +11,6 @@ public class Address {
     private String houseNumber;
 
     public Address() {
-    }
-
-    public Long getAddressId() {
-        return addressId;
-    }
-
-    public void setAddressId(Long addressId) {
-        this.addressId = addressId;
     }
 
     public String getCity() {

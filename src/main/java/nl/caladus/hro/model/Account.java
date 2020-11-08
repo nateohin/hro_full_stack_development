@@ -1,7 +1,5 @@
 package nl.caladus.hro.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +18,7 @@ public class Account extends BaseEntity {
     @Column(unique=true)
     private String IBAN;
 
-    @Min(value = 8,  message = "account number needs to be 8 characters")
+    @Min(value = 8,  message = "Account number needs to be 8 characters")
     @NotNull
     private int accountNumber;
 
@@ -29,8 +27,7 @@ public class Account extends BaseEntity {
 
     private boolean blocked = false;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @NotNull(message = "Account holder must not be null")
     private Set<AccountHolder> accountHolders;
 
@@ -75,10 +72,6 @@ public class Account extends BaseEntity {
     public int getAccountNumber() {
         return accountNumber;
     }
-
-//    public void setIBANPrefix(String IBANPrefix) {
-//        this.IBANPrefix = IBANPrefix;
-//    }
 
     @Override
     public String toString() {

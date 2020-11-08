@@ -3,8 +3,6 @@ package nl.caladus.hro.model;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -22,10 +20,6 @@ public class AccountHolder extends BaseEntity {
     @Embedded
     private Address address;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Account account;
-
-    @Embedded
     public Address getAddress() {
         return address;
     }
