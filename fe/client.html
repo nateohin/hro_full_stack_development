@@ -71,9 +71,13 @@
                     </a>
                 </li>
             </ul>
-            <form class="form-inline">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Log gebruiker1 uit</button>
-            </form>
+            <ul class="navbar-nav ml-auto">
+                <li>
+                    <form class="form-inline">
+                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Log gebruiker1 uit</button>
+                    </form>
+                </li>
+            </ul>
         </nav>
     </header>
     <div class="container">
@@ -85,7 +89,7 @@
                 <div class="alert alert-secondary" role="alert">
                     Gegevens voor K Test1
                 </div>
-                
+
             </dic>
 
         </div>
@@ -96,63 +100,65 @@
                 <h3>Klantgegevens</h3>
                 <form>
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">Voorletters</label>
+                        <label for="initials" class="col-sm-2 col-form-label">Voorletters</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control" id="inputEmail3">
+                            <input type="text" class="form-control" id="initials" required>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputPassword3" class="col-sm-2 col-form-label">Achternaam</label>
+                        <label for="last_name" class="col-sm-2 col-form-label">Achternaam</label>
                         <div class="col-sm-10">
-                            <input type="password" class="form-control" id="inputPassword3">
+                            <input type="text" class="form-control" id="last_name" required>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">Straat</label>
+                        <label for="street" class="col-sm-2 col-form-label">Straat</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control" id="inputEmail3">
+                            <input type="text" class="form-control" id="street" maxlength="50" required>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputPassword3" class="col-sm-2 col-form-label">Huisnummer</label>
+                        <label for="house_number" class="col-sm-2 col-form-label">Huisnummer</label>
                         <div class="col-sm-10">
-                            <input type="password" class="form-control" id="inputPassword3">
+                            <input type="text" class="form-control" id="house_number" maxlength="10" equiredrequired>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">Plaats</label>
+                        <label for="city" class="col-sm-2 col-form-label">Plaats</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control" id="inputEmail3">
+                            <input type="text" class="form-control" id="city" maxlength="50" equired required>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputPassword3" class="col-sm-2 col-form-label">Postcode</label>
+                        <label for="postal_code" class="col-sm-2 col-form-label">Postcode</label>
                         <div class="col-sm-10">
-                            <input type="password" class="form-control" id="inputPassword3">
+                            <input type="text" class="form-control" id="postal_code" minlenght="6" maxlength="6" equired
+                                required>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">BSN</label>
+                        <label for="bsn" class="col-sm-2 col-form-label">BSN</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control" id="inputEmail3">
+                            <input type="text" class="form-control" id="bsn" minlength="9" maxlength="9" required>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputPassword3" class="col-sm-2 col-form-label">Geboortedatum</label>
+                        <label for="birth_date" class="col-sm-2 col-form-label">Geboortedatum</label>
                         <div class="col-sm-10">
-                            <input type="password" class="form-control" id="inputPassword3">
+                            <input type="date" class="form-control" id="birth_date" required>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">Tel. nr</label>
+                        <label for="phonenumber" class="col-sm-2 col-form-label">Tel. nr</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control" id="inputEmail3">
+                            <input type="text" class="form-control" id="phonenumber" minlenght="10" maxlength="10"
+                                equired>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+                        <label for="email" class="col-sm-2 col-form-label">Email</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control" id="inputEmail3">
+                            <input type="email" class="form-control" id="email" maxlength="50" required>
                         </div>
                     </div>
                     <div class="form-group row nav-button">
