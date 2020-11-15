@@ -34,3 +34,6 @@ build/
 
 ### maven ###
 .mvn/
+
+### angular ###
+angular/project/node_modules/
